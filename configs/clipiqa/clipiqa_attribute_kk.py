@@ -1,4 +1,4 @@
-exp_name = 'clipiqa'
+exp_name = 'clipiqa_kk'
 
 # model settings
 model = dict(
@@ -7,11 +7,6 @@ model = dict(
     generator=dict(
         type='CLIPIQAFixed', # mmedit/models/backbones/sr_backbones/coopclipiqa.py
         backbone_name='RN50',
-
-        # test Koniq and liveiwt dataset
-        #classnames=[
-        #    ['Good photo.', 'Bad photo.'],
-        #]),
 
         # test degradation attributes
         classnames=[
@@ -31,17 +26,8 @@ model = dict(
             ['Complex photo.', 'Simple photo.'],
         ]),
 
-        # test AVA attributes
-        # classnames=[
-        #     ['Aesthetic photo.', 'Not aesthetic photo.'],
-        #     ['Happy photo.', 'Sad photo.'],
-        #     ['Natural photo.', 'Synthetic photo.'],
-        #     ['New photo.', 'Old photo.'],
-        #     ['Scary photo.', 'Peaceful photo.'],
-        #     ['Complex photo.', 'Simple photo.'],
-        # ]),
-
     pixel_loss=dict(type='MSELoss', loss_weight=1.0, reduction='mean'))
+
 # model training and testing settings
 train_cfg = dict(fix_iter=5000)
 test_cfg = dict(metrics=['L1DIS'], crop_border=0)
@@ -179,7 +165,7 @@ data = dict(
 optimizers = dict(
     generator=dict(
         type='SGD',
-        lr=0.00125))
+        lr=0.002))
 
 # learning policy
 total_iters = 300000
@@ -192,7 +178,7 @@ lr_config = dict(
 
 checkpoint_config = dict(interval=10000, save_optimizer=True, by_epoch=False)
 # remove gpu_collect=True in non distributed training
-evaluation = dict(interval=10000, save_image=False, gpu_collect=True)
+evaluation = dict(interval=10000, save_image=False)
 log_config = dict(
     interval=100,
     hooks=[

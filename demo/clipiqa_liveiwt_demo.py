@@ -19,8 +19,8 @@ def parse_args():
     parser = argparse.ArgumentParser(description='ClipIQA demo')
     parser.add_argument('--config', default='configs/clipiqa/clipiqa_attribute_test.py', help='test config file path')
     parser.add_argument('--checkpoint', default=None, help='checkpoint file')
-    parser.add_argument('--file_path', default='/root/4T/dataset/Live-iWT/Images/', help='path to input image file')
-    parser.add_argument('--csv_path', default='/root/4T/dataset/Live-iWT/Data/', help='path to input image file')
+    parser.add_argument('--file_path', default='../dataset/Live-iWT/Images/', help='path to input image file')
+    parser.add_argument('--csv_path', default='../dataset/Live-iWT/Data/', help='path to input image file')
     parser.add_argument('--device', type=int, default=0, help='CUDA device id')
     args = parser.parse_args()
     return args
@@ -37,9 +37,12 @@ def main():
 
     pred_score = []
     for i in tqdm(range(len(image_mat))):
+        print( os.path.join(args.file_path, image_mat[i][0][0]))
+        exit(0)
         output, attributes = restoration_inference(model, os.path.join(args.file_path, image_mat[i][0][0]), return_attributes=True)
         output = output.float().detach().cpu().numpy()
-        pred_score.append(attributes[0])
+        #pred_score.append(attributes[0])
+        pred_score.append(attributes.float().detach().cpu().numpy()[0])
 
     pred_score = np.squeeze(np.array(pred_score))*100
     y_true = mos_mat
